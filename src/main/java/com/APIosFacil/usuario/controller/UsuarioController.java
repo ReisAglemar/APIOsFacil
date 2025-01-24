@@ -5,6 +5,7 @@ import com.APIosFacil.usuario.domain.dto.DetalhaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.ListaUsuarioDto;
 import com.APIosFacil.usuario.domain.model.UsuarioEntity;
 import com.APIosFacil.usuario.domain.repository.UsuarioRespository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public class UsuarioController {
 
     @PostMapping("/cadastrar")
     @Transactional
-    public ResponseEntity cadastraUsuario(@RequestBody CadastraUsuarioDto usuarioDto, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity cadastraUsuario(@RequestBody @Valid CadastraUsuarioDto usuarioDto, UriComponentsBuilder uriComponentsBuilder) {
         UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioDto);
         repository.save(usuarioEntity);
         URI uri = uriComponentsBuilder.path("/usuario/detalhar/{id}").buildAndExpand(usuarioEntity.getId()).toUri();

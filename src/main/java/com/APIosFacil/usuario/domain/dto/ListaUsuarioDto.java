@@ -9,7 +9,6 @@ public record ListaUsuarioDto(
         String email) {
 
 
-
     public ListaUsuarioDto(UsuarioEntity usuario) {
         this(
                 usuario.getId(),
