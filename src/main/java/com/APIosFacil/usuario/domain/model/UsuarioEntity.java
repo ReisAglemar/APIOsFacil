@@ -1,5 +1,6 @@
 package com.APIosFacil.usuario.domain.model;
 
+import com.APIosFacil.usuario.domain.dto.AtualizaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.CadastraUsuarioDto;
 import jakarta.persistence.*;
 
@@ -35,10 +36,6 @@ public class UsuarioEntity {
         this.email = usuario.email();
         this.senha = usuario.senha();
         this.ativo = true;
-    }
-
-    public void inativarUsuario() {
-        this.ativo = false;
     }
 
     public Long getId() {
@@ -77,18 +74,22 @@ public class UsuarioEntity {
         return Objects.hash(id, cpf, email);
     }
 
-    public void atualizar(CadastraUsuarioDto usuarioDto) {
+    public void atualizar(AtualizaUsuarioDto usuarioDto) {
 
-        if (usuarioDto.nome() != null) {
+        if (usuarioDto.nome() != null && !usuarioDto.nome().isBlank()) {
             this.nome = usuarioDto.nome();
         }
 
-        if (usuarioDto.email() != null) {
+        if (usuarioDto.email() != null && !usuarioDto.email().isBlank()) {
             this.email = usuarioDto.email();
         }
 
-        if (usuarioDto.senha() != null) {
+        if (usuarioDto.senha() != null && !usuarioDto.senha().isBlank()) {
             this.senha = usuarioDto.senha();
         }
+    }
+
+    public void inativarUsuario() {
+        this.ativo = false;
     }
 }
