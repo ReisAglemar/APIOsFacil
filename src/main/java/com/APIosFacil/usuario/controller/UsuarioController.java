@@ -4,7 +4,6 @@ import com.APIosFacil.usuario.domain.dto.AtualizaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.CadastraUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.DetalhaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.ListaUsuarioDto;
-import com.APIosFacil.usuario.domain.repository.UsuarioRespository;
 import com.APIosFacil.usuario.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
