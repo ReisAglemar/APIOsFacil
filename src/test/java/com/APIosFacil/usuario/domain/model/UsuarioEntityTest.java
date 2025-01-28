@@ -4,6 +4,9 @@ import com.APIosFacil.usuario.domain.dto.AtualizaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.CadastraUsuarioDto;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UsuarioEntityTest {
@@ -30,28 +33,35 @@ class UsuarioEntityTest {
         assertEquals("Atualiza Reis", usuario.getNome(), "Nome Deveria Ter Sido Atualizado");
         assertEquals("AtualizaReis@gmail.com", usuario.getEmail(), "E-mail Deveria Ter Sido Atualizado");
         assertEquals("AtualizaReisSenha3456", usuario.getSenha(), "Senha Deveria Ter Sido Atualizado");
-
     }
 
     @Test
     public void naoDeveAtualizarUsuarioRecebendoDto() {
         CadastraUsuarioDto usuarioDto = new CadastraUsuarioDto("Reis", "35727103088", "Reis@gmail.com", "ReisSenha3456");
         UsuarioEntity usuario = new UsuarioEntity(usuarioDto);
-        String[] vetorPossibilidades = new String[]{"", " ", null};
+        List<AtualizaUsuarioDto> possibilidades = preparaPossibilidades();
+        realizaTeste(possibilidades, usuario);
+    }
 
-        //gera todas as combinações possíveis
-        for (String nome : vetorPossibilidades) {
-            for (String email : vetorPossibilidades) {
-                for (String senha : vetorPossibilidades) {
-                    AtualizaUsuarioDto atualizaUsuarioDto = new AtualizaUsuarioDto(nome, email, senha);
-                    usuario.atualizar(atualizaUsuarioDto);
+    private List<AtualizaUsuarioDto> preparaPossibilidades(){
+        //se necessário, adicione novas possibilidades no array entradasPossiveis
+        String[] entradasPossiveis = new String[]{"", " ", null};
+        List<AtualizaUsuarioDto> possibilidades = Arrays.stream(entradasPossiveis)
+                .flatMap(nome -> Arrays.stream(entradasPossiveis)
+                        .flatMap(email -> Arrays.stream(entradasPossiveis)
+                                .map(senha -> new AtualizaUsuarioDto(nome, email, senha))))
+                .toList();
+        return possibilidades;
+    }
 
-                    assertEquals("Reis", usuario.getNome(), "Nome Não Deveria Ter Sido Atualizado");
-                    assertEquals("Reis@gmail.com", usuario.getEmail(), "E-mail Não Deveria Ter Sido Atualizado");
-                    assertEquals("ReisSenha3456", usuario.getSenha(), "Senha Não Deveria Ter Sido Atualizado");
-                }
-            }
-        }
+    private void realizaTeste(List<AtualizaUsuarioDto> possibilidades, UsuarioEntity usuario){
+        possibilidades.forEach(dto -> {
+            usuario.atualizar(dto);
+
+            assertEquals("Reis", usuario.getNome(), "Nome Não Deveria Ter Sido Atualizado");
+            assertEquals("Reis@gmail.com", usuario.getEmail(), "E-mail Não Deveria Ter Sido Atualizado");
+            assertEquals("ReisSenha3456", usuario.getSenha(), "Senha Não Deveria Ter Sido Atualizado");
+        });
     }
 
     @Test
