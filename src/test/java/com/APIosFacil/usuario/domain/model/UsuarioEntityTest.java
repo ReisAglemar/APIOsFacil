@@ -43,7 +43,7 @@ class UsuarioEntityTest {
         realizaTeste(possibilidades, usuario);
     }
 
-    private List<AtualizaUsuarioDto> preparaPossibilidades(){
+    private List<AtualizaUsuarioDto> preparaPossibilidades() {
         //se necessário, adicione novas possibilidades no array entradasPossiveis
         String[] entradasPossiveis = new String[]{"", " ", null};
         List<AtualizaUsuarioDto> possibilidades = Arrays.stream(entradasPossiveis)
@@ -54,7 +54,7 @@ class UsuarioEntityTest {
         return possibilidades;
     }
 
-    private void realizaTeste(List<AtualizaUsuarioDto> possibilidades, UsuarioEntity usuario){
+    private void realizaTeste(List<AtualizaUsuarioDto> possibilidades, UsuarioEntity usuario) {
         possibilidades.forEach(dto -> {
             usuario.atualizar(dto);
 
