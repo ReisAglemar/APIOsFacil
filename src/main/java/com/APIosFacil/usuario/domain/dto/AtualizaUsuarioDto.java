@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 
 public record AtualizaUsuarioDto(
 
-        @Pattern(regexp = "[a-zA-ZÀ-ÿ ]{3,}", message = "{nome.invalid}")
+        @Pattern(regexp = "[a-zA-ZÀ-ÿ]{3,}[a-zA-ZÀ-ÿ ]*", message = "{nome.invalid}")
         String nome,
 
         @Email(message = "{email.invalid}")

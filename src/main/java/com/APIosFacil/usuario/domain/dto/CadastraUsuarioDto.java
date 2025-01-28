@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.br.CPF;
 public record CadastraUsuarioDto(
 
         @NotBlank(message = "{nome.notblank}")
-        @Pattern(regexp = "[a-zA-ZÀ-ÿ ]{3,}", message = "{nome.invalid}")
+        @Pattern(regexp = "[a-zA-ZÀ-ÿ]{3,}[a-zA-ZÀ-ÿ ]*", message = "{nome.invalid}")
         String nome,
 
 
