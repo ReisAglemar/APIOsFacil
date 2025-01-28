@@ -9,6 +9,7 @@ public record AtualizaUsuarioDto(
         String nome,
 
         @Email(message = "{email.invalid}")
+        @Pattern(regexp = "(?!\\s).+", message = "{email.notblank}")
         String email,
 
         @Pattern(regexp = "(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{7,}", message = "{senha.invalid}")
