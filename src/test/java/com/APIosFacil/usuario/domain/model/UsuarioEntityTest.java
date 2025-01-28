@@ -13,19 +13,19 @@ class UsuarioEntityTest {
 
     @Test
     public void deveCriarUsuarioRecebendoDto() {
-        CadastraUsuarioDto usuarioDto = new CadastraUsuarioDto("Reis", "35727103088", "Reis@gmail.com", "ReisSenha3456");
+        CadastraUsuarioDto usuarioDto = new CadastraUsuarioDto("Reis", "35727103088", "reis@gmail.com", "ReisSenha3456");
         UsuarioEntity usuario = new UsuarioEntity(usuarioDto);
 
         assertEquals("Reis", usuario.getNome(), "Nome não foi Atribuído Corretamente");
         assertEquals("35727103088", usuario.getCpf(), "CPF não foi Atribuído Corretamente");
-        assertEquals("Reis@gmail.com", usuario.getEmail(), "E-mail não foi Atribuído Corretamente");
+        assertEquals("reis@gmail.com", usuario.getEmail(), "E-mail não foi Atribuído Corretamente");
         assertEquals("ReisSenha3456", usuario.getSenha(), "Senha não foi Atribuído Corretamente");
         assertTrue(usuario.isAtivo(), "Usuário não foi Ativado");
     }
 
     @Test
     public void deveAtualizarUsuarioRecebendoDto() {
-        CadastraUsuarioDto usuarioDto = new CadastraUsuarioDto("Reis", "35727103088", "Reis@gmail.com", "ReisSenha3456");
+        CadastraUsuarioDto usuarioDto = new CadastraUsuarioDto("Reis", "35727103088", "reis@gmail.com", "ReisSenha3456");
         UsuarioEntity usuario = new UsuarioEntity(usuarioDto);
         AtualizaUsuarioDto atualizaUsuarioDto = new AtualizaUsuarioDto("Atualiza Reis", "AtualizaReis@gmail.com", "AtualizaReisSenha3456");
         usuario.atualizar(atualizaUsuarioDto);
@@ -37,7 +37,7 @@ class UsuarioEntityTest {
 
     @Test
     public void naoDeveAtualizarUsuarioRecebendoDto() {
-        CadastraUsuarioDto usuarioDto = new CadastraUsuarioDto("Reis", "35727103088", "Reis@gmail.com", "ReisSenha3456");
+        CadastraUsuarioDto usuarioDto = new CadastraUsuarioDto("Reis", "35727103088", "reis@gmail.com", "ReisSenha3456");
         UsuarioEntity usuario = new UsuarioEntity(usuarioDto);
         List<AtualizaUsuarioDto> possibilidades = preparaPossibilidades();
         realizaTeste(possibilidades, usuario);
@@ -59,16 +59,16 @@ class UsuarioEntityTest {
             usuario.atualizar(dto);
 
             assertEquals("Reis", usuario.getNome(), "Nome Não Deveria Ter Sido Atualizado");
-            assertEquals("Reis@gmail.com", usuario.getEmail(), "E-mail Não Deveria Ter Sido Atualizado");
+            assertEquals("reis@gmail.com", usuario.getEmail(), "E-mail Não Deveria Ter Sido Atualizado");
             assertEquals("ReisSenha3456", usuario.getSenha(), "Senha Não Deveria Ter Sido Atualizado");
         });
     }
 
     @Test
     public void deveConsiderarUsariosIguaisSeIdCpfEmailForemIguais() {
-        CadastraUsuarioDto usuarioDto1 = new CadastraUsuarioDto("Reis", "35727103088", "Reis@gmail.com", "ReisSenha3456");
+        CadastraUsuarioDto usuarioDto1 = new CadastraUsuarioDto("Reis", "35727103088", "reis@gmail.com", "ReisSenha3456");
         UsuarioEntity usuario1 = new UsuarioEntity(usuarioDto1);
-        CadastraUsuarioDto usuarioDto2 = new CadastraUsuarioDto("Reis", "35727103088", "Reis@gmail.com", "ReisSenha3456");
+        CadastraUsuarioDto usuarioDto2 = new CadastraUsuarioDto("Reis", "35727103088", "reis@gmail.com", "ReisSenha3456");
         UsuarioEntity usuario2 = new UsuarioEntity(usuarioDto2);
 
         assertEquals(usuario1, usuario2);

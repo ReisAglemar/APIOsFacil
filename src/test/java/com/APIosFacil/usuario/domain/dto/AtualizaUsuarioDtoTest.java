@@ -3,10 +3,11 @@ package com.APIosFacil.usuario.domain.dto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,43 +19,76 @@ class AtualizaUsuarioDtoTest {
 
     @BeforeEach
     public void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @Test
     public void deveAceitarCamposValidos() {
-        AtualizaUsuarioDto dto = new AtualizaUsuarioDto("Aglemar Reis", "teste@gmail.com", "Senha123");
-
+        AtualizaUsuarioDto dto = new AtualizaUsuarioDto("Aglemar Reis", "reis@gmail.com", "Senha123");
         Set<ConstraintViolation<AtualizaUsuarioDto>> violations = validator.validate(dto);
-
-        assertTrue(violations.isEmpty(), "Deveria aceitar campos válidos");
+        assertTrue(violations.isEmpty(), "Deveria aceitar, campos são válidos");
     }
 
     @Test
     public void naoDeveAceitarNomeInvalido() {
-        AtualizaUsuarioDto dto = new AtualizaUsuarioDto("re", "teste@gmail.com", "Senha123");
+        List<String> nomesInvalidos = new ArrayList<>();
+        nomesInvalidos.add("");
+        nomesInvalidos.add(" ");
+        nomesInvalidos.add("  ");
+        nomesInvalidos.add("Re");
+        nomesInvalidos.add("Re ");
 
-        Set<ConstraintViolation<AtualizaUsuarioDto>> violations = validator.validate(dto);
+        nomesInvalidos.forEach(nomeInvalido -> {
+            Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
+                    validator.validate(new AtualizaUsuarioDto(nomeInvalido, "reis@gmail.com", "Senha1234"));
 
-        assertFalse(violations.isEmpty(), "Deveria rejeitar nome inválido");
+            assertFalse(violations.isEmpty(), "Não deveria aceitar, nome é inválids");
+            violations.forEach(violation -> {
+                System.out.println("ENTRADA: " + nomeInvalido + " | " + "MENSAGEN: " + violation.getMessage());
+            });
+        });
     }
 
     @Test
-    public void naoDeveAceitarEmailInvalido() {
-        AtualizaUsuarioDto dto = new AtualizaUsuarioDto("Aglemar Reis", "emailinvalido@.com", "Senha123");
+    public void naoDeveAceitarEmaillInvalido() {
+        List<String> emailInvalidos = new ArrayList<>();
+        emailInvalidos.add("");
+        emailInvalidos.add(" ");
+        emailInvalidos.add("  ");
+        emailInvalidos.add("reis@.com");
+        emailInvalidos.add("reisgmail.com");
+        emailInvalidos.add("@gmail.com");
+        emailInvalidos.add(" @gmail.com");
 
-        Set<ConstraintViolation<AtualizaUsuarioDto>> violations = validator.validate(dto);
+        emailInvalidos.forEach(emailInvalido -> {
+            Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
+                    validator.validate(new AtualizaUsuarioDto("Reis", emailInvalido, "Senha1234"));
 
-        assertFalse(violations.isEmpty(), "Deveria rejeitar email inválido");
+            assertFalse(violations.isEmpty(), "Não deveria aceitar, email é inválido");
+            violations.forEach(violation -> {
+                System.out.println("ENTRADA: " + emailInvalido + " | " + "MENSAGEN: " + violation.getMessage());
+            });
+        });
     }
 
     @Test
     public void naoDeveAceitarSenhaInvalida() {
-        AtualizaUsuarioDto dto = new AtualizaUsuarioDto("Aglemar Reis", "teste@gmail.com", "senhaInvalida");
+        List<String> senhaInvalidas = new ArrayList<>();
+        senhaInvalidas.add("");
+        senhaInvalidas.add(" ");
+        senhaInvalidas.add("  ");
+        senhaInvalidas.add("semNumero");
+        senhaInvalidas.add("1234567");
+        senhaInvalidas.add("       4");
 
-        Set<ConstraintViolation<AtualizaUsuarioDto>> violations = validator.validate(dto);
+        senhaInvalidas.forEach(senhaInvalida -> {
+            Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
+                    validator.validate(new AtualizaUsuarioDto("Reis", "reis@gmail.com", senhaInvalida));
 
-        assertFalse(violations.isEmpty(), "Deveria rejeitar senha inválida");
+            assertFalse(violations.isEmpty(), "Não deveria aceitar, senha é inválida");
+            violations.forEach(violation -> {
+                System.out.println("ENTRADA: " + senhaInvalida + " | " + "MENSAGEN: " + violation.getMessage());
+            });
+        });
     }
 }
