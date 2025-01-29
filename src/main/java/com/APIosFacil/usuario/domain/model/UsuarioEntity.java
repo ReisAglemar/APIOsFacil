@@ -38,6 +38,15 @@ public class UsuarioEntity {
         this.ativo = true;
     }
 
+    public UsuarioEntity(Long id, String nome, String cpf, String email, String senha, boolean ativo) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
+        this.ativo = ativo;
+    }
+
     public Long getId() {
         return id;
     }
