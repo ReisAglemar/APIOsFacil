@@ -5,9 +5,9 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -29,66 +29,39 @@ class AtualizaUsuarioDtoTest {
         assertTrue(violations.isEmpty(), "Deveria aceitar, campos são válidos");
     }
 
-    @Test
-    public void naoDeveAceitarNomeInvalido() {
-        List<String> nomesInvalidos = new ArrayList<>();
-        nomesInvalidos.add("");
-        nomesInvalidos.add(" ");
-        nomesInvalidos.add("  ");
-        nomesInvalidos.add("Re");
-        nomesInvalidos.add("Re ");
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   ", "Re", "re ", " re"})
+    public void naoDeveAceitarNomeInvalido(String nomeInvalido) {
+        Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
+                validator.validate(new AtualizaUsuarioDto(nomeInvalido, "reis@gmail.com", "Senha1234"));
 
-        nomesInvalidos.forEach(nomeInvalido -> {
-            Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
-                    validator.validate(new AtualizaUsuarioDto(nomeInvalido, "reis@gmail.com", "Senha1234"));
-
-            assertFalse(violations.isEmpty(), "Não deveria aceitar, nome é inválids");
-            violations.forEach(violation -> {
-                System.out.println("ENTRADA: " + nomeInvalido + " | " + "MENSAGEN: " + violation.getMessage());
-            });
+        assertFalse(violations.isEmpty(), "Não deveria aceitar, nome é inválids");
+        violations.forEach(violation -> {
+            System.out.println("ENTRADA: " + nomeInvalido + " | " + "MENSAGEN: " + violation.getMessage());
         });
     }
 
-    @Test
-    public void naoDeveAceitarEmaillInvalido() {
-        List<String> emailInvalidos = new ArrayList<>();
-        emailInvalidos.add("");
-        emailInvalidos.add(" ");
-        emailInvalidos.add("  ");
-        emailInvalidos.add("reis@.com");
-        emailInvalidos.add("reisgmail.com");
-        emailInvalidos.add("@gmail.com");
-        emailInvalidos.add(" @gmail.com");
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   ", "reis@.com", "reisgmail.com", "@gmail.com", " @gmail.com"})
+    public void naoDeveAceitarEmaillInvalido(String emailInvalido) {
+        Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
+                validator.validate(new AtualizaUsuarioDto("Reis", emailInvalido, "Senha1234"));
 
-        emailInvalidos.forEach(emailInvalido -> {
-            Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
-                    validator.validate(new AtualizaUsuarioDto("Reis", emailInvalido, "Senha1234"));
-
-            assertFalse(violations.isEmpty(), "Não deveria aceitar, email é inválido");
-            violations.forEach(violation -> {
-                System.out.println("ENTRADA: " + emailInvalido + " | " + "MENSAGEN: " + violation.getMessage());
-            });
+        assertFalse(violations.isEmpty(), "Não deveria aceitar, email é inválido");
+        violations.forEach(violation -> {
+            System.out.println("ENTRADA: " + emailInvalido + " | " + "MENSAGEN: " + violation.getMessage());
         });
     }
 
-    @Test
-    public void naoDeveAceitarSenhaInvalida() {
-        List<String> senhaInvalidas = new ArrayList<>();
-        senhaInvalidas.add("");
-        senhaInvalidas.add(" ");
-        senhaInvalidas.add("  ");
-        senhaInvalidas.add("semNumero");
-        senhaInvalidas.add("1234567");
-        senhaInvalidas.add("       4");
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   ", "semNumero", "1234567", "       4"})
+    public void naoDeveAceitarSenhaInvalida(String senhaInvalida) {
+        Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
+                validator.validate(new AtualizaUsuarioDto("Reis", "reis@gmail.com", senhaInvalida));
 
-        senhaInvalidas.forEach(senhaInvalida -> {
-            Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
-                    validator.validate(new AtualizaUsuarioDto("Reis", "reis@gmail.com", senhaInvalida));
-
-            assertFalse(violations.isEmpty(), "Não deveria aceitar, senha é inválida");
-            violations.forEach(violation -> {
-                System.out.println("ENTRADA: " + senhaInvalida + " | " + "MENSAGEN: " + violation.getMessage());
-            });
+        assertFalse(violations.isEmpty(), "Não deveria aceitar, senha é inválida");
+        violations.forEach(violation -> {
+            System.out.println("ENTRADA: " + senhaInvalida + " | " + "MENSAGEN: " + violation.getMessage());
         });
     }
 }
