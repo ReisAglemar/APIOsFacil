@@ -8,8 +8,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -25,8 +27,16 @@ public class H2ConfigTest {
         DriverManagerDataSource driver = (DriverManagerDataSource) dataSource;
         assertNotNull(driver);
 
-        assertEquals("jdbc:h2:mem:osFacilDb;DB_CLOSE_DELAY=-1", driver.getUrl());
-        assertEquals("sa", driver.getUsername());
-        assertEquals("", driver.getPassword());
+        assertEquals("jdbc:h2:mem:osFacilDb;DB_CLOSE_DELAY=-1", driver.getUrl(), "Erro ao obter URL ");
+        assertEquals("sa", driver.getUsername(), "Erro ao obter username ");
+        assertEquals("", driver.getPassword(), "Erro ao obter password");
+    }
+
+    @Test
+    public void H2ConexaoTeste() throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            assertNotNull(connection, "Não pode ser nulo");
+            assertTrue(connection.isValid(5), "Conexão foi inválida");
+        }
     }
 }
