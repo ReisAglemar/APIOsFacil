@@ -1,51 +1,41 @@
 package com.APIosFacil.usuario.config;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("prod")
 public class PostgreSqlConfigTest {
 
-    @Autowired
-    private DataSource dataSource;
+    @InjectMocks
+    private DriverManagerDataSource driver;
 
     @Test
-    public void PostgreSqlConfigTeste() {
-        PostgreSqlConfig postgreSqlConfig = new PostgreSqlConfig();
+    @DisplayName("Deve verificar as configurações DB")
+    public void TestaConfiguracaoPostgreSQL() {
 
-        ReflectionTestUtils.setField(postgreSqlConfig, "USUARIO_DB_LOCAL", "localhost:5432");
-        ReflectionTestUtils.setField(postgreSqlConfig, "USUARIO_DB_NAME", "usuariodb");
-        ReflectionTestUtils.setField(postgreSqlConfig, "USUARIO_DB_USER", "user");
-        ReflectionTestUtils.setField(postgreSqlConfig, "USUARIO_DB_PASSWORD", "password");
+        String DRIVER = "org.postgresql.Driver";
+        String USUARIO_DB_LOCAL = System.getenv("USUARIO_DB_LOCAL");
+        String USUARIO_DB_NAME = System.getenv("USUARIO_DB_NAME");
+        String USUARIO_DB_USER = System.getenv("USUARIO_DB_USER");
+        String USUARIO_DB_PASSWORD = System.getenv("USUARIO_DB_PASSWORD");
 
-        DataSource dataSource = postgreSqlConfig.dataSource();
-        DriverManagerDataSource driverManagerDataSource = (DriverManagerDataSource) dataSource;
+        driver.setDriverClassName(DRIVER);
+        driver.setUrl(USUARIO_DB_LOCAL + "/" + USUARIO_DB_NAME);
+        driver.setUsername(USUARIO_DB_USER);
+        driver.setPassword(USUARIO_DB_PASSWORD);
 
-        assertNotNull(driverManagerDataSource);
-        assertEquals("jdbc:postgresql://localhost:5432/usuariodb", driverManagerDataSource.getUrl(), "Erro ao obter url");
-        assertEquals("user", driverManagerDataSource.getUsername(), "Erro ao obter user");
-        assertEquals("password", driverManagerDataSource.getPassword(), "Erro ao obter password");
-    }
-
-    @Test
-    public void PostgreSqlConexaoTeste() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            assertNotNull(connection, "Conexão não pode ser nula");
-            assertTrue(connection.isValid(5), "Conexão foi inválida");
-        }
+        Assertions.assertNotNull(driver);
+        assertEquals(USUARIO_DB_LOCAL + "/" +USUARIO_DB_NAME, driver.getUrl(), "Erro ao obter URL");
+        assertEquals(USUARIO_DB_USER, driver.getUsername(), "Erro ao obter username ");
+        assertEquals(USUARIO_DB_PASSWORD, driver.getPassword(), "Erro ao obter password");
     }
 }

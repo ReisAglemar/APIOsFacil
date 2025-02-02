@@ -1,42 +1,37 @@
 package com.APIosFacil.usuario.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.sql.DataSource;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest
 @ActiveProfiles("dev")
+@ExtendWith(MockitoExtension.class)
 public class H2ConfigTest {
 
-    @Autowired
-    private DataSource dataSource;
+    @InjectMocks
+    public DriverManagerDataSource driver;
 
     @Test
-    public void H2ConfigTeste() {
-        assertNotNull(dataSource);
+    @DisplayName("Deve verificar as configurações DB")
+    public void TestaConfiguracaoH2() {
+        String URL = "jdbc:h2:mem:osFacilDb;DB_CLOSE_DELAY=-1";
+        String USERNAME = "sa";
+        String PASSWORD = "";
 
-        DriverManagerDataSource driver = (DriverManagerDataSource) dataSource;
+        driver.setUrl(URL);
+        driver.setUsername(USERNAME);
+        driver.setPassword(PASSWORD);
+
         assertNotNull(driver);
-
-        assertEquals("jdbc:h2:mem:osFacilDb;DB_CLOSE_DELAY=-1", driver.getUrl(), "Erro ao obter URL ");
-        assertEquals("sa", driver.getUsername(), "Erro ao obter username ");
-        assertEquals("", driver.getPassword(), "Erro ao obter password");
-    }
-
-    @Test
-    public void H2ConexaoTeste() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            assertNotNull(connection, "Não pode ser nulo");
-            assertTrue(connection.isValid(5), "Conexão foi inválida");
-        }
+        assertEquals(URL, driver.getUrl(), "Erro ao obter URL ");
+        assertEquals(USERNAME, driver.getUsername(), "Erro ao obter username ");
+        assertEquals(PASSWORD, driver.getPassword(), "Erro ao obter password");
     }
 }

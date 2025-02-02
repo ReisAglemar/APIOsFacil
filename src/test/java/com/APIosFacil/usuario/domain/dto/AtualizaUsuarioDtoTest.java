@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -23,6 +24,7 @@ class AtualizaUsuarioDtoTest {
     }
 
     @Test
+    @DisplayName("Deve aceitar com campos válidos")
     public void deveAceitarCamposValidos() {
         AtualizaUsuarioDto dto = new AtualizaUsuarioDto("Aglemar Reis", "reis@gmail.com", "Senha123");
         Set<ConstraintViolation<AtualizaUsuarioDto>> violations = validator.validate(dto);
@@ -31,6 +33,7 @@ class AtualizaUsuarioDtoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "   ", "Re", "re ", " re"})
+    @DisplayName("Não deve aceitar, nome inválido")
     public void naoDeveAceitarNomeInvalido(String nomeInvalido) {
         Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
                 validator.validate(new AtualizaUsuarioDto(nomeInvalido, "reis@gmail.com", "Senha1234"));
@@ -43,6 +46,7 @@ class AtualizaUsuarioDtoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "   ", "reis@.com", "reisgmail.com", "@gmail.com", " @gmail.com"})
+    @DisplayName("Não deve aceitar, e-mail inválido")
     public void naoDeveAceitarEmaillInvalido(String emailInvalido) {
         Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
                 validator.validate(new AtualizaUsuarioDto("Reis", emailInvalido, "Senha1234"));
@@ -55,6 +59,7 @@ class AtualizaUsuarioDtoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "   ", "semNumero", "1234567", "       4"})
+    @DisplayName("Não deve aceitar, senha inválida")
     public void naoDeveAceitarSenhaInvalida(String senhaInvalida) {
         Set<ConstraintViolation<AtualizaUsuarioDto>> violations =
                 validator.validate(new AtualizaUsuarioDto("Reis", "reis@gmail.com", senhaInvalida));
