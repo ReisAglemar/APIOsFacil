@@ -23,34 +23,40 @@ public class UsuarioController {
     @Autowired
     private UsuarioService service;
 
+
     @PostMapping("/cadastrar")
     public ResponseEntity cadastraUsuario(@RequestBody @Valid CadastraUsuarioDto usuarioDto, UriComponentsBuilder uriComponentsBuilder) {
         DetalhaUsuarioDto detalhaUsuarioDto = service.cadastraUsuario(usuarioDto);
         URI uri = uriComponentsBuilder.path("/usuario/detalhar/{id}").buildAndExpand(detalhaUsuarioDto.id()).toUri();
+        //201 + location + body
         return ResponseEntity.created(uri).body(detalhaUsuarioDto);
     }
 
     @GetMapping("/detalhar/{id}")
     public ResponseEntity detalhaUsuarioPorId(@PathVariable Long id) {
         DetalhaUsuarioDto detalhaUsuarioDto = service.detalhaUsuarioPorId(id);
+        //200 + body
         return ResponseEntity.ok(detalhaUsuarioDto);
     }
 
     @DeleteMapping("/apagar/{id}")
     public ResponseEntity apagaUsuario(@PathVariable Long id) {
         service.apagaUsuario(id);
+        //204
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/listar")
     public ResponseEntity<Page<ListaUsuarioDto>> listaUsuario(@PageableDefault(size = 5, sort = {"id"}) Pageable pagina) {
         Page usuarios = service.listaUsuario(pagina);
+        //200 + body
         return ResponseEntity.ok(usuarios);
     }
 
     @PutMapping("/atualizar/{id}")
     public ResponseEntity atualizaUsuario(@PathVariable Long id, @RequestBody @Valid AtualizaUsuarioDto usuarioDto) {
         DetalhaUsuarioDto detalhaUsuarioDto = service.atualizaUsuario(id, usuarioDto);
+        //200 + body
         return ResponseEntity.ok(detalhaUsuarioDto);
     }
 }
