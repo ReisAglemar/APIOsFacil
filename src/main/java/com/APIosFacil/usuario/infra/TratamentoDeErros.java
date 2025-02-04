@@ -23,7 +23,7 @@ public class TratamentoDeErros {
         return ResponseEntity.badRequest().body(erros.stream().map(tratamentoStatus400::new).toList());
     }
 
-    public record tratamentoStatus400(String campo, String mensagem) {
+    private record tratamentoStatus400(String campo, String mensagem) {
         public tratamentoStatus400(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());
         }

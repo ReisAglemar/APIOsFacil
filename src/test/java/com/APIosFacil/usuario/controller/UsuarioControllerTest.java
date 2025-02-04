@@ -28,10 +28,10 @@ import static org.mockito.Mockito.when;
 class UsuarioControllerTest {
 
     @InjectMocks
-    UsuarioController controller;
+    private UsuarioController controller;
 
     @Mock
-    UsuarioService service;
+    private UsuarioService service;
 
     @Test
     @DisplayName("Ao cadastrar usuário deve retornar 201, location e body")
@@ -45,9 +45,9 @@ class UsuarioControllerTest {
         when(service.cadastraUsuario(cadastraUsuarioDto)).thenReturn(detalhaUsuarioDto);
         ResponseEntity<?> response = controller.cadastraUsuario(cadastraUsuarioDto, UriComponentsBuilder.newInstance());
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(detalhaUsuarioDto, response.getBody());
-        assertEquals("/usuario/detalhar/1", response.getHeaders().getLocation().getPath());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode(), "Deveria retornar 201");
+        assertEquals(detalhaUsuarioDto, response.getBody(), "Deveria retornar body");
+        assertEquals("/usuario/detalhar/1", response.getHeaders().getLocation().getPath(), "Deveria retornar location");
     }
 
     @Test
@@ -59,8 +59,8 @@ class UsuarioControllerTest {
         when(service.detalhaUsuarioPorId(1L)).thenReturn(detalhaUsuarioDto);
         ResponseEntity<?> response = controller.detalhaUsuarioPorId(1L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(detalhaUsuarioDto, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "Deveria retornar 200");
+        assertEquals(detalhaUsuarioDto, response.getBody(), "Deveria retornar body");
     }
 
     @Test
@@ -69,7 +69,7 @@ class UsuarioControllerTest {
         doNothing().when(service).apagaUsuario(1L);
         ResponseEntity<?> response = controller.apagaUsuario(1L);
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode(), "Deveria retornar 204");
     }
 
     @Test
@@ -81,8 +81,8 @@ class UsuarioControllerTest {
         when(service.listaUsuario(Pageable.unpaged())).thenReturn(page);
         ResponseEntity<?> response = controller.listaUsuario(Pageable.unpaged());
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(page, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "Deveria retornar 200");
+        assertEquals(page, response.getBody(), "Deveria retornar body");
     }
 
     @Test
@@ -96,7 +96,7 @@ class UsuarioControllerTest {
         when(service.atualizaUsuario(1L, atualizaUsuarioDto)).thenReturn(detalhaUsuarioDto);
         ResponseEntity<?> response = controller.atualizaUsuario(1L, atualizaUsuarioDto);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(detalhaUsuarioDto, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "Deveria retornar 200");
+        assertEquals(detalhaUsuarioDto, response.getBody(), "Deveria retornar body");
     }
 }
