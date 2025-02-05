@@ -47,6 +47,5 @@ public class UsuarioService {
     public Page listaUsuario(Pageable pagina) {
         Page<ListaUsuarioDto> usuario = repository.findAllByAtivoTrue(pagina).map(ListaUsuarioDto::new);
         return usuario;
-
     }
 }
