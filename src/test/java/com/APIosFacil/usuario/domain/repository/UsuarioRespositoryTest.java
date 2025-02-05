@@ -42,9 +42,9 @@ class UsuarioRespositoryTest {
             service.cadastraUsuario(usuario);
         }
 
-        service.apagaUsuario(2L);
-        service.apagaUsuario(3L);
-        service.apagaUsuario(4L);
+        for (Long i = 2L; i <=4L ; i++) {
+            service.apagaUsuario(i);
+        }
     }
 
     @Test
