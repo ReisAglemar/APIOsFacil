@@ -5,10 +5,7 @@ import com.APIosFacil.usuario.domain.dto.CadastraUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.ListaUsuarioDto;
 import com.APIosFacil.usuario.domain.model.UsuarioEntity;
 import com.APIosFacil.usuario.domain.repository.UsuarioRespository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -52,7 +49,7 @@ class UsuarioServiceTest {
         UsuarioEntity usuarioEntity = respository.getReferenceById(1L);
 
         assertEquals("Reis", usuarioEntity.getNome(), "O nome está salvo de forma errada");
-        assertEquals("35727103088", usuarioEntity.getCpf(),"O cpf está salvo de forma errada");
+        assertEquals("35727103088", usuarioEntity.getCpf(), "O cpf está salvo de forma errada");
         assertEquals("reis@gmail.com", usuarioEntity.getEmail(), "O e-mail está salvo de forma errada");
         assertEquals("reisSenha1234", usuarioEntity.getSenha(), "A senha está salva de forma errada");
         assertEquals(1L, usuarioEntity.getId(), "O id não foi gerado");
@@ -63,12 +60,12 @@ class UsuarioServiceTest {
     @Transactional
     @DisplayName("Deve apagar usuário, apagar = status desativado")
     public void deveInativarUsuario() {
-        UsuarioEntity usuarioEntity = respository.getReferenceById(1l);
+        UsuarioEntity usuarioEntity = respository.getReferenceById(1L);
         usuarioEntity.inativarUsuario();
 
-        UsuarioEntity usuario = respository.getReferenceById(1l);
+        UsuarioEntity usuario = respository.getReferenceById(1L);
 
-        assertEquals(false, usuario.isAtivo(),"O usuário deveria estar desativado");
+        assertFalse(usuario.isAtivo(), "O usuário deveria estar desativado");
     }
 
     @Test
@@ -77,11 +74,11 @@ class UsuarioServiceTest {
     public void deveAtualizarUsuario() {
         AtualizaUsuarioDto dto = new AtualizaUsuarioDto("Aglemar Reis", "reisAglemar@gmail.com", "Senha123");
 
-        UsuarioEntity usuarioEntity = respository.getReferenceById(1l);
+        UsuarioEntity usuarioEntity = respository.getReferenceById(1L);
         usuarioEntity.atualizar(dto);
-        UsuarioEntity usuario = respository.getReferenceById(1l);
+        UsuarioEntity usuario = respository.getReferenceById(1L);
 
-        assertEquals(dto.nome(),usuario.getNome(), "Nome não foi atualizado");
+        assertEquals(dto.nome(), usuario.getNome(), "Nome não foi atualizado");
         assertEquals(dto.email(), usuario.getEmail(), "E-mail não foi atualizado");
         assertEquals(dto.senha(), usuario.getSenha(), "Senha não foi atualizada");
         System.out.println(usuario.isAtivo());
@@ -94,15 +91,15 @@ class UsuarioServiceTest {
         Pageable pageable = PageRequest.of(0, 5);
         Page<ListaUsuarioDto> PageUsuarios = respository.findAllByAtivoTrue(pageable).map(ListaUsuarioDto::new);
 
-        assertFalse(PageUsuarios.isEmpty(),"A página não deveria estar vazia");
+        assertFalse(PageUsuarios.isEmpty(), "A página não deveria estar vazia");
         assertEquals(5, PageUsuarios.getSize(), "O tamanho da página está incorreto");
         assertEquals(0, PageUsuarios.getNumber(), "A página deve iniciar em zero 0");
         assertEquals(1, PageUsuarios.getTotalElements(), "Há mais de um usuário na página");
-        assertEquals(1, PageUsuarios.getTotalPages(),"Foi criada mais de uma página");
+        assertEquals(1, PageUsuarios.getTotalPages(), "Foi criada mais de uma página");
 
         List<ListaUsuarioDto> ListUsuarios = PageUsuarios.getContent();
 
-        ListaUsuarioDto usuario = ListUsuarios.get(0);
+        ListaUsuarioDto usuario = ListUsuarios.getFirst();
 
         assertEquals(1L, usuario.id(), "O id não foi gerado");
         assertEquals("Reis", usuario.nome(), "O nome foi retornado de forma errada");
