@@ -1,10 +1,16 @@
 package com.APIosFacil.usuario.controller;
 
+import com.APIosFacil.usuario.config.openApi.UsuarioControllerOpenApi;
 import com.APIosFacil.usuario.domain.dto.AtualizaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.CadastraUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.DetalhaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.ListaUsuarioDto;
 import com.APIosFacil.usuario.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,14 +24,17 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/usuario")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioService service;
 
 
+
+
     @PostMapping("/cadastrar")
-    public ResponseEntity cadastraUsuario(@RequestBody @Valid CadastraUsuarioDto usuarioDto, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity cadastraUsuario(@RequestBody @Valid CadastraUsuarioDto usuarioDto,
+                                          UriComponentsBuilder uriComponentsBuilder) {
         DetalhaUsuarioDto detalhaUsuarioDto = service.cadastraUsuario(usuarioDto);
         URI uri = uriComponentsBuilder.path("/usuario/detalhar/{id}").buildAndExpand(detalhaUsuarioDto.id()).toUri();
         //201 + location + body
