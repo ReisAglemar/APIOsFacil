@@ -1,15 +1,14 @@
 package com.APIosFacil.usuario.controller;
 
+import com.APIosFacil.usuario.config.openApi.UsuarioControllerOpenApi;
 import com.APIosFacil.usuario.domain.dto.AtualizaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.CadastraUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.DetalhaUsuarioDto;
 import com.APIosFacil.usuario.domain.dto.ListaUsuarioDto;
 import com.APIosFacil.usuario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -25,39 +24,14 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/usuario")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioService service;
 
 
 
-    @Operation(
-            summary = "Cadastro de Usuário",
-            description = "Endpoint para cadastrar um novo usuário no sistema. O corpo da requisição deve seguir o formato especificado no CadastraUsuarioDto."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Usuário cadastrado com sucesso. Retorna o código 201, o header 'Location' com o link para detalhes do usuário, e o corpo com os dados do usuário cadastrado.",
-                    content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "Exemplo de Resposta",
-                                    value = "{ \"id\": 1, \"nome\": \"João da Silva\", \"cpf\": \"123.456.789-00\", \"email\": \"joao.silva@email.com\" }"
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Requisição inválida. O retorno inclui detalhes sobre quais campos não passaram nas validações.",
-                    content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "Exemplo de Erro",
-                                    value = "{ \"erro\": \"CPF inválido\", \"codigo\": 400 }"
-                            )
-                    )
-            )
-    })
+
     @PostMapping("/cadastrar")
     public ResponseEntity cadastraUsuario(@RequestBody @Valid CadastraUsuarioDto usuarioDto,
                                           UriComponentsBuilder uriComponentsBuilder) {
