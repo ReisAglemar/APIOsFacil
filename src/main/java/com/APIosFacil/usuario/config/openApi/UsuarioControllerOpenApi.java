@@ -143,42 +143,72 @@ public interface UsuarioControllerOpenApi {
 
     @Operation(
             summary = "Detalha Usuário Por id",
-            description = "Endpoint para detalhar um usuário no sistema. O corpo da requisição deve informar um id.")
+            description = "Endpoint para detalhar um usuário no sistema. O corpo da requisição deve informar um id."
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "Apresenta o usuário localizado",
                     content = @Content(mediaType = "application/json",
-                    examples = {
-                            @ExampleObject(
-                                    name = "Usuário encontrado",
-                                    value = "{\n" +
-                                            "\t\"id\": 1,\n" +
-                                            "\t\"nome\": \"João da Silva\",\n" +
-                                            "\t\"cpf\": \"357.271.030-88\",\n" +
-                                            "\t\"email\": \"joao.silva@email.com\",\n" +
-                                            "\t\"senha\": \"SenhaJoao137\",\n" +
-                                            "\t\"ativo\": true\n" +
-                                            "}"
-                            )
-                    })
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Usuário encontrado",
+                                            value = "{\n" +
+                                                    "\t\"id\": 1,\n" +
+                                                    "\t\"nome\": \"João da Silva\",\n" +
+                                                    "\t\"cpf\": \"357.271.030-88\",\n" +
+                                                    "\t\"email\": \"joao.silva@email.com\",\n" +
+                                                    "\t\"senha\": \"SenhaJoao137\",\n" +
+                                                    "\t\"ativo\": true\n" +
+                                                    "}"
+                                    )
+                            })
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = "Usuário não encontrado para o id fornecido",
                     content = @Content(mediaType = "application/json",
-                    examples = {
-                            @ExampleObject(
-                                    name = "Usuário não encontrado",
-                                    value = "Nessa situação não haverá body na reposta, retorna apenas 404"
-                            )
-                    })
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Usuário não encontrado",
+                                            value = "Nessa situação não haverá body na reposta, retorna apenas 404"
+                                    )
+                            })
             )
     })
     ResponseEntity detalhaUsuarioPorId(@PathVariable Long id);
 
+    @Operation(
+            summary = "Apaga usuário por id",
+            description = "Endpoint para apagar usuário cadastrados no sistema"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Usuário terá seu atributo ativo modificado para false",
+                    content = @Content(mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Usuário apagado",
+                                            value = "Nessa situação não haverá body na reposta. " +
+                                                    "O atributo ATIVO será modificado para FALSE e retorna 204"
+                                    )
+                            })
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado para o id fornecido",
+                    content = @Content(mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Usuário não encontrado",
+                                            value = "Nessa situação não haverá body na reposta, retorna apenas 404"
+                                    )
+                            })
+            )
+    })
     ResponseEntity apagaUsuario(@PathVariable Long id);
-
+    
     ResponseEntity<Page<ListaUsuarioDto>> listaUsuario(@PageableDefault(size = 5, sort = {"id"}) Pageable pagina);
 
     ResponseEntity atualizaUsuario(@PathVariable Long id, @RequestBody @Valid AtualizaUsuarioDto usuarioDto);
