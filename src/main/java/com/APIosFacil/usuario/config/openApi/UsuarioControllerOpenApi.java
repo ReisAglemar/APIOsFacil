@@ -208,8 +208,60 @@ public interface UsuarioControllerOpenApi {
             )
     })
     ResponseEntity apagaUsuario(@PathVariable Long id);
-    
-    ResponseEntity<Page<ListaUsuarioDto>> listaUsuario(@PageableDefault(size = 5, sort = {"id"}) Pageable pagina);
+
+    @Operation(
+            summary = "Lista todos os usuário",
+            description = "Endpoint para listar todos os usuários cadastrados no sistema, retorna uma página com 5 usuários " +
+                    "ordenados por id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Retorna uma página contendo informações da página e no máximo 5 usuários ordenados por id",
+                    content = @Content(mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Lista Usuários",
+                                            value = "{\n" +
+                                                    "\t\"content\": [\n" +
+                                                    "\t\t{\n" +
+                                                    "\t\t\t\"id\": 1,\n" +
+                                                    "\t\t\t\"nome\": \"João da Silva\",\n" +
+                                                    "\t\t\t\"email\": \"joao.silva@email.com\"\n" +
+                                                    "\t\t}\n" +
+                                                    "\t],\n" +
+                                                    "\t\"pageable\": {\n" +
+                                                    "\t\t\"pageNumber\": 0,\n" +
+                                                    "\t\t\"pageSize\": 5,\n" +
+                                                    "\t\t\"sort\": {\n" +
+                                                    "\t\t\t\"sorted\": true,\n" +
+                                                    "\t\t\t\"unsorted\": false,\n" +
+                                                    "\t\t\t\"empty\": false\n" +
+                                                    "\t\t},\n" +
+                                                    "\t\t\"offset\": 0,\n" +
+                                                    "\t\t\"paged\": true,\n" +
+                                                    "\t\t\"unpaged\": false\n" +
+                                                    "\t},\n" +
+                                                    "\t\"totalElements\": 1,\n" +
+                                                    "\t\"totalPages\": 1,\n" +
+                                                    "\t\"last\": true,\n" +
+                                                    "\t\"first\": true,\n" +
+                                                    "\t\"size\": 5,\n" +
+                                                    "\t\"number\": 0,\n" +
+                                                    "\t\"sort\": {\n" +
+                                                    "\t\t\"sorted\": true,\n" +
+                                                    "\t\t\"unsorted\": false,\n" +
+                                                    "\t\t\"empty\": false\n" +
+                                                    "\t},\n" +
+                                                    "\t\"numberOfElements\": 1,\n" +
+                                                    "\t\"empty\": false\n" +
+                                                    "}"
+                                    )
+                            }
+                    )
+            )
+    })
+    ResponseEntity<Page<ListaUsuarioDto>> listaUsuario(@Parameter(hidden = true) @PageableDefault(size = 5, sort = {"id"}) Pageable pagina);
 
     ResponseEntity atualizaUsuario(@PathVariable Long id, @RequestBody @Valid AtualizaUsuarioDto usuarioDto);
 }
